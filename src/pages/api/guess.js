@@ -62,11 +62,12 @@ export default async function handler(req, res) {
     let score = 0;
     if (ANSWER_SONG?.artist === songInfo?.artist) score += 25;
     if (ANSWER_SONG?.title === songInfo?.title) score += 25;
-    if (correctAlbum) score += 25;
-    if (correctGenre) {
+    if (correctAlbum) {
         score += 25;
         album = ANSWER_SONG?.album;
     }
+
+    if (correctGenre) score += 25;
 
     const results = {
         title: songInfo?.title,
@@ -79,6 +80,8 @@ export default async function handler(req, res) {
         correctGenre: correctGenre,
         score: score,
     };
+
+    console.log(results);
 
     return res.status(200).json(results);
 }
