@@ -23,7 +23,7 @@ const Search = ({addGuess}) => {
     }
 
     const makeGuess = (title, artist) => {
-        fetch("/api/guess?artist=" + artist + "&title=" + title)
+        fetch("/api/guess?artist=" + artist + "&title=" + title + "&date=" + new Date().toLocaleDateString().split('T')[0])
         .then(response => response.json())
         .then(data => {
             addGuess(data);

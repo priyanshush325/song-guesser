@@ -20,6 +20,7 @@ export default function Home() {
   const [genre, setGenre] = useState(null);
   const [album, setAlbum] = useState(null);
   const [showIntro, setShowIntro] = useState(true);
+  const [prompt, setPrompt] = useState("-");
 
   const addGuess = (guess) => {
     if (currentGuess > 4) {
@@ -52,6 +53,26 @@ export default function Home() {
 
   const currentDate = new Date();
 
+  const handleGameStart = () => {
+    setShowIntro(false);
+    setCurrentGuess(0);
+    setArtist(null);
+    setGenre(null);
+    setAlbum(null);
+
+    const date = new Date().toLocaleDateString().split('T')[0]; // Use current date
+    console.log('Current Date:', date);
+    
+    try {
+        fetch(`/api/prompt?date=${date}`)
+        .then((response) => response.json())
+        .then((data) => {
+            setPrompt(data.prompt);
+        });
+    } catch (error) {
+        console.error(error);
+    }
+}
 
   return (
     <div className = "flex flex-col items-center justify-center w-screen min-h-screen text-white p-4 gap-6">
@@ -64,13 +85,13 @@ export default function Home() {
                 <HoverInfo guessInfo = {{correctArtist: true, correctGenre: true}}/>
               </div>
               <form method = "dialog" className = "w-full sm:mt-6 flex justify-center">
-                <button className="btn btn-success text-white w-3/5" onClick = {() => setShowIntro(false)}>Start <span className = "text-sm italic font-normal"> - {currentDate.toLocaleDateString()}</span></button>
+                <button className="btn btn-success text-white w-3/5" onClick = {handleGameStart}>Start <span className = "text-sm italic font-normal"> - {currentDate.toLocaleDateString()}</span></button>
               </form>
           </div>
       </dialog>
       <SongInfo artist = {artist} genre = {genre} album = {album}/>
       <div className = "w-full md:w-4/5 flex flex-col items-center md:px-20">
-        <Prompt promptText = "🥭 ❤️ 🙂‍↕️"/>
+        <Prompt promptText = {prompt}/>
       </div>
       <div className = "w-full md:w-4/5 flex flex-col items-center md:px-20">
         <Search addGuess = {addGuess}/>

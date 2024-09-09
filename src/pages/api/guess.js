@@ -1,17 +1,30 @@
-export default async function handler(req, res) {
-    const { artist, title } = req.query;
-    const API_BASE_URL = process.env.API_BASE_URL;
+import { supabase } from "../../../lib/supabaseClient";
 
-    const ANSWER_SONG = {
-        title: "DNA.",
-        artist: "Kendrick Lamar",
-        album: "DAMN.",
-        genre: "Hip-Hop",
-    };
+export default async function handler(req, res) {
+    const { artist, title, date } = req.query;
+    const API_BASE_URL = process.env.API_BASE_URL;
 
     if (!artist || !title) {
         return res.status(400).send("artist and title are required");
     }
+
+    const ANSWER_DATA = await supabase
+        .from('emoji-prompts')
+        .select()
+        .eq('date', date)
+        .single();
+
+
+    console.log("Answer Data:", ANSWER_DATA.data);
+
+    if (!ANSWER_DATA.data["song_data"]) {
+        return res.status(404).json({ error: "No song data found for the given date" });
+    }
+
+    const ANSWER_SONG = ANSWER_DATA.data["song_data"];
+    console.log(ANSWER_SONG);
+
+
 
     let songInfo;
 
