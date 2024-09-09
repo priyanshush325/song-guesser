@@ -1,10 +1,7 @@
 import {useState, useEffect} from 'react';
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
 import ReactHover, { Trigger, Hover } from 'react-hover';
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
-import CircularProgress from '@mui/material/CircularProgress';
 
 const HoverInfo = ({guessInfo}) => {
     const [showHoverInfo, setShowHoverInfo] = useState(true);
@@ -42,64 +39,91 @@ const HoverInfo = ({guessInfo}) => {
     )
 }
 
-
-const Guess = ({guess}) => {
+const Guess = ({ guess }) => {
     const [score, setScore] = useState(0);
 
-    const hoverOptions =  {
+    const hoverOptions = {
         followCursor: false,
-    }
+    };
 
-    //Animate the progress bar filling up
+    // Animate the progress bar filling up
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setScore(Math.min(score + 1, guess?.score || 0));
+            setScore(prevScore => Math.min(prevScore + 1, guess?.score || 0));
         }, 1);
 
         return () => clearInterval(intervalId);
-    }, [guess?.score, score]);
+    }, [guess?.score]);
 
-    let strokeColor = "lightgreen";
+    let strokeColor = 'lightgreen';
 
-    if (guess && score <= 75) {
-        strokeColor = "yellow";
+    if (score <= 75) {
+        strokeColor = 'yellow';
+    }
+    if (score <= 50) {
+        strokeColor = 'orange';
+    }
+    if (score <= 25) {
+        strokeColor = 'red';
     }
 
-    if (guess && score <= 50) {
-        strokeColor = "orange";
-    }
+    // Custom circular progress indicator
+    const CircleProgress = ({ value, color }) => {
+        const radius = 18;
+        const circumference = 2 * Math.PI * radius;
+        const offset = circumference - (value / 100) * circumference;
 
-    if (guess && score <= 25) {
-        strokeColor = "red";
-    }
+        return (
+            <svg width="40" height="40">
+                <circle
+                    cx="20"
+                    cy="20"
+                    r={radius}
+                    stroke="grey"
+                    strokeWidth="4"
+                    fill="transparent"
+                />
+                <circle
+                    cx="20"
+                    cy="20"
+                    r={radius}
+                    stroke={color}
+                    strokeWidth="4"
+                    fill="transparent"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    strokeLinecap="round"
+                    transform="rotate(-90 20 20)"
+                />
+            </svg>
+        );
+    };
 
     if (guess) {
         return (
-            <div className = "w-full rounded-3xl h-20 bg-black bg-opacity-50 flex flex-row items-center justify-between px-5">
-                <div className = "flex flex-col items-start justify-center">
-                    <div className = "text-white font-bold md:text-lg">{guess.title}</div>
-                    <div className = "text-sm text-white md:text-md"> {guess.artist}</div>
+            <div className="w-full rounded-3xl h-20 bg-black bg-opacity-50 flex flex-row items-center justify-between px-5">
+                <div className="flex flex-col items-start justify-center">
+                    <div className="text-white font-bold md:text-lg">{guess.title}</div>
+                    <div className="text-sm text-white md:text-md">{guess.artist}</div>
                 </div>
-                <ReactHover options = {hoverOptions}>
-                    <Trigger type = "hover">
-                        <div className = "h-full flex flex-col items-center justify-center w-12 md:w-16">
-                            <CircularProgress variant = "determinate" value = {score} color = {strokeColor} />
+                <ReactHover options={hoverOptions}>
+                    <Trigger type="hover">
+                        <div className="h-full flex flex-col items-center justify-center w-12 md:w-16">
+                            <CircleProgress value={score} color={strokeColor} />
                         </div>
                     </Trigger>
-                    <Hover type = "hover" >
-                            <HoverInfo guessInfo = {guess}/>
+                    <Hover type="hover">
+                        <HoverInfo guessInfo={guess} />
                     </Hover>
                 </ReactHover>
             </div>
-        )
-    }
-
-    else {
+        );
+    } else {
         return (
-            <div className = "w-full rounded-3xl h-20 bg-black bg-opacity-5"></div>
-        )
+            <div className="w-full rounded-3xl h-20 bg-black bg-opacity-5"></div>
+        );
     }
-}
+};
 
 const Guesses = ({guesses}) => {
     return (
