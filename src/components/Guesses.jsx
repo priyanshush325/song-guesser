@@ -4,6 +4,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import ReactHover, { Trigger, Hover } from 'react-hover';
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoCloseCircleOutline } from "react-icons/io5";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const HoverInfo = ({guessInfo}) => {
     const [showHoverInfo, setShowHoverInfo] = useState(true);
@@ -82,7 +83,7 @@ const Guess = ({guess}) => {
                 <ReactHover options = {hoverOptions}>
                     <Trigger type = "hover">
                         <div className = "h-full flex flex-col items-center justify-center w-12 md:w-16">
-                            <CircularProgressbar value = {score} styles = {{path: {stroke: strokeColor}}}/>
+                            <CircularProgress variant = "determinate" value = {score} color = {strokeColor} />
                         </div>
                     </Trigger>
                     <Hover type = "hover" >
