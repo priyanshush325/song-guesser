@@ -39,7 +39,7 @@ const GameWin = ({guesses, currentGuess}) => {
             <dialog id="win-modal" className="modal">
             <div className="modal-box flex flex-col justify-center items-center gap-2">
                 <h1 className="font-bold text-3xl text-black">Correct!</h1>
-                <h3 className = "font-bold text-lg text-green-600 mb-5">Guesses: {currentGuess}</h3>
+                <h3 className = "font-bold text-lg text-green-600 mb-5">Guesses: {currentGuess + 1}</h3>
                 <p className = "text-black text-md">Share your results:</p>
                 <div className = "flex flex-row justify-center items-center gap-5">
                     <div className = "flex justify-center items-center rounded-full bg-green-400 w-[32px] h-[32px] cursor-pointer" onClick = {() => {window.open("sms://?&body=" + encodeURIComponent(generateShareMessage()), "_blank")}}><BiSolidMessageRounded className = "text-lg text-white"/></div>
