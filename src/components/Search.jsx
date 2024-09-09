@@ -1,7 +1,5 @@
 import {useState, useEffect} from 'react';
 
-import styles from "./Search.module.css";
-
 
 const Search = ({addGuess}) => {
     const [search, setSearch] = useState("");

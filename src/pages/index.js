@@ -21,6 +21,17 @@ export default function Home() {
   const [prompt, setPrompt] = useState("-");
   const [currentDate, setCurrentDate] = useState('');
 
+  useEffect(
+    () => {
+      const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+      if (isDarkMode) {
+        document.documentElement.classList.remove("dark");
+      }
+
+    }, [])
+
+
   useEffect(() => {
     setCurrentDate(new Date().toLocaleDateString());
   }, []);
@@ -74,7 +85,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-screen min-h-screen text-white p-4 gap-6">
+    <div className="flex flex-col items-center justify-center w-screen min-h-screen text-white p-4 gap-6" data-theme="light">
       <dialog id="intro-modal" className="modal text-black">
         <div className="modal-box flex flex-col justify-center items-center gap-3 overflow-hidden">
           <h1 className="font-bold text-3xl">Song Guesser </h1>
