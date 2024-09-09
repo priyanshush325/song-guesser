@@ -7,11 +7,10 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
     },
+  },
+  daisyui: {
+    themes: false,
   },
   plugins: [
     require('daisyui')
