@@ -31,6 +31,7 @@ export default async function handler(req, res) {
     let correctGenre = false;
     let correctAlbum = false;
     let genre = null;
+    let album = null;
 
     if (songInfo?.album && songInfo.album.toLowerCase().includes(ANSWER_SONG.album.toLowerCase())) {
         correctAlbum = true;
@@ -49,12 +50,16 @@ export default async function handler(req, res) {
     if (ANSWER_SONG?.artist === songInfo?.artist) score += 25;
     if (ANSWER_SONG?.title === songInfo?.title) score += 25;
     if (correctAlbum) score += 25;
-    if (correctGenre) score += 25;
+    if (correctGenre) {
+        score += 25;
+        album = ANSWER_SONG?.album;
+    }
 
     const results = {
         title: songInfo?.title,
         artist: songInfo?.artist,
         genre: genre,
+        album: album,
         correctArtist: ANSWER_SONG?.artist === songInfo?.artist,
         correctTitle: ANSWER_SONG?.title === songInfo?.title,
         correctAlbum: correctAlbum,

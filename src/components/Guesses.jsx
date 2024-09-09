@@ -106,16 +106,9 @@ const Guess = ({ guess }) => {
                     <div className="text-white font-bold md:text-lg">{guess.title}</div>
                     <div className="text-sm text-white md:text-md">{guess.artist}</div>
                 </div>
-                <ReactHover options={hoverOptions}>
-                    <Trigger type="hover">
-                        <div className="h-full flex flex-col items-center justify-center w-12 md:w-16">
-                            <CircleProgress value={score} color={strokeColor} />
-                        </div>
-                    </Trigger>
-                    <Hover type="hover">
-                        <HoverInfo guessInfo={guess} />
-                    </Hover>
-                </ReactHover>
+                <div className="h-full flex flex-col items-center justify-center w-12 md:w-16">
+                    <CircleProgress value={score} color={strokeColor} />
+                </div>
             </div>
         );
     } else {

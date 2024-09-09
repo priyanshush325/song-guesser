@@ -18,6 +18,7 @@ export default function Home() {
   const [currentGuess, setCurrentGuess] = useState(0);
   const [artist, setArtist] = useState(null);
   const [genre, setGenre] = useState(null);
+  const [album, setAlbum] = useState(null);
   const [showIntro, setShowIntro] = useState(true);
 
   const addGuess = (guess) => {
@@ -36,6 +37,10 @@ export default function Home() {
 
     if (guess.correctGenre) {
         setGenre(guess.genre);
+    }
+
+    if (guess.correctAlbum) {
+        setAlbum(guess.album);
     }
   };
 
@@ -63,7 +68,7 @@ export default function Home() {
               </form>
           </div>
       </dialog>
-      <SongInfo artist = {artist} genre = {genre}/>
+      <SongInfo artist = {artist} genre = {genre} album = {album}/>
       <div className = "w-full md:w-4/5 flex flex-col items-center md:px-20">
         <Prompt promptText = "🥭 ❤️ 🙂‍↕️"/>
       </div>
