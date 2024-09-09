@@ -79,7 +79,7 @@ const Guess = ({ guess }) => {
                     cx="20"
                     cy="20"
                     r={radius}
-                    stroke="grey"
+                    stroke="rgba(128,128,128,0.3)"
                     strokeWidth="4"
                     fill="transparent"
                 />
@@ -101,10 +101,10 @@ const Guess = ({ guess }) => {
 
     if (guess) {
         return (
-            <div className="w-full rounded-3xl h-20 bg-black bg-opacity-50 flex flex-row items-center justify-between px-5">
+            <div className="w-full rounded-3xl h-16 bg-black bg-opacity-50 flex flex-row items-center justify-between px-5 sm:h-20">
                 <div className="flex flex-col items-start justify-center">
-                    <div className="text-white font-bold md:text-lg">{guess.title}</div>
-                    <div className="text-sm text-white md:text-md">{guess.artist}</div>
+                    <div className="text-white font-bold text-sm sm:text-lg">{guess.title}</div>
+                    <div className="text-xs text-white sm:text-md">{guess.artist}</div>
                 </div>
                 <div className="h-full flex flex-col items-center justify-center w-12 md:w-16">
                     <CircleProgress value={score} color={strokeColor} />
@@ -113,7 +113,7 @@ const Guess = ({ guess }) => {
         );
     } else {
         return (
-            <div className="w-full rounded-3xl h-20 bg-black bg-opacity-5"></div>
+            <div className="w-full rounded-3xl h-16 bg-black bg-opacity-5 sm:h-20"></div>
         );
     }
 };

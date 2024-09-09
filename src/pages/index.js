@@ -9,6 +9,8 @@ import SongInfo from "../components/SongInfo";
 import Prompt from "../components/Prompt";
 import Search from "../components/Search";
 import Guesses from "../components/Guesses";
+import GameWin from "../components/GameWin";
+import GameLose from "../components/GameLose";
 import {HoverInfo} from "../components/Guesses";
 
 export default function Home() {
@@ -31,37 +33,16 @@ export default function Home() {
 
     }, [])
 
+    useEffect(() => {
+      if (showIntro) {
+        document.getElementById("intro-modal").showModal();
+      }
+    }, [showIntro]);
+
 
   useEffect(() => {
     setCurrentDate(new Date().toLocaleDateString());
   }, []);
-
-  const addGuess = (guess) => {
-    if (currentGuess > 4) return;
-    const updatedGuesses = guesses.map((g, index) => 
-        index === currentGuess ? guess : g
-    );
-    setGuesses(updatedGuesses);
-    setCurrentGuess(currentGuess + 1);
-
-    if (guess.correctArtist) {
-      setArtist(guess.artist);
-    }
-
-    if (guess.correctGenre) {
-      setGenre(guess.genre);
-    }
-
-    if (guess.correctAlbum) {
-      setAlbum(guess.album);
-    }
-  };
-
-  useEffect(() => {
-    if (showIntro) {
-      document.getElementById("intro-modal").showModal();
-    }
-  }, [showIntro]);
 
   const handleGameStart = () => {
     setShowIntro(false);
@@ -83,6 +64,51 @@ export default function Home() {
       console.error(error);
     }
   };
+
+  const addGuess = (guess) => {
+    // If the user has already made 5 guesses, do not allow more guesses
+    if (currentGuess >= 5) return;
+
+    // Update the guesses array with the new guess
+    const updatedGuesses = guesses.map((g, index) => 
+        index === currentGuess ? guess : g
+    );
+    setGuesses(updatedGuesses);
+
+    // Check if the guess is correct
+    if (guess.correctArtist) {
+        setArtist(guess.artist);
+    }
+    if (guess.correctGenre) {
+        setGenre(guess.genre);
+    }
+    if (guess.correctAlbum) {
+        setAlbum(guess.album);
+    }
+
+    // If the guess is perfect (score is 100), handle a win
+    if (guess.score === 100) {
+        handleGameWin();
+        return; // No need to check further if the user wins
+    }
+
+    // If this is the last guess (5th guess) and it's not correct, handle a loss
+    if (currentGuess === 4 && guess.score < 100) {
+        handleGameLose();
+        return; // No need to increment `currentGuess` if the game is over
+    }
+    // Increment the guess counter
+    setCurrentGuess(currentGuess + 1);
+};
+
+
+  const handleGameWin = () => {
+    document.getElementById("win-modal").showModal();
+  }
+
+  const handleGameLose = () => {
+    document.getElementById("lose-modal").showModal();
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-screen min-h-screen text-white p-4 gap-6" data-theme="light">
@@ -107,6 +133,8 @@ export default function Home() {
         <Search addGuess={addGuess} />
       </div>
       <Guesses guesses={guesses} />
+      <GameWin guesses = {guesses} currentGuess = {currentGuess}/>
+      <GameLose guesses = {guesses}/>
     </div>
   );
 }
